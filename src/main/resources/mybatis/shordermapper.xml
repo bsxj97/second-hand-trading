@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.daowen.mapper.ShorderMapper">
+
+
+    <resultMap id="rmOrderBase" type="com.daowen.vo.OrderDTO">
+        <id column="id" property="id"></id>
+        <result column="ddno" property="ddno" ></result>
+        <result column="createtime" property="createtime" ></result>
+        <result column="purchaser" property="purchaser" ></result>
+        <result column="puraccount" property="puraccount" ></result>
+        <result column="purname" property="purname" ></result>
+        <result column="addid" property="addid" ></result>
+        <result column="psstyle" property="psstyle" ></result>
+        <result column="totalfee" property="totalfee" ></result>
+        <result column="state" property="state" ></result>
+        <result column="remark" property="remark" ></result>
+    </resultMap>
+
+    <resultMap id="rmOrder" extends="rmOrderBase"  type="com.daowen.vo.OrderDTO">
+
+
+        <collection property="orderDetail" ofType="com.daowen.vo.OrderItemDTO" column="id">
+            <id column="oiid" property="id"/>
+            <result column="spid" property="spid" ></result>
+            <result column="spname" property="spname" ></result>
+            <result column="count" property="count" ></result>
+            <result column="price" property="price" ></result>
+            <result column="totalprice" property="totalprice" ></result>
+            <result column="tupian" property="tupian" ></result>
+            <result column="oistate" property="state" ></result>
+            <result column="wlno" property="wlno" ></result>
+            <result column="cresult" property="cresult" ></result>
+            <result column="comdes" property="comdes" ></result>
+
+
+        </collection>
+
+    </resultMap>
+    <resultMap id="rmOrder2"  type="com.daowen.vo.OrderDTO">
+        <id column="id" property="id"></id>
+        <result column="ddno" property="ddno" ></result>
+        <result column="createtime" property="createtime" ></result>
+        <result column="purchaser" property="purchaser" ></result>
+        <result column="puraccount" property="puraccount" ></result>
+        <result column="purname" property="purname" ></result>
+        <result column="addid" property="addid" ></result>
+        <result column="psstyle" property="psstyle" ></result>
+        <result column="totalfee" property="totalfee" ></result>
+        <result column="state" property="state" ></result>
+        <result column="remark" property="remark" ></result>
+        <collection property="orderDetail" select="getOrderItem" ofType="com.daowen.vo.OrderItemDTO" column="{id=id}"/>
+
+    </resultMap>
+
+    <resultMap id="rmOrderItemDTO" type="com.daowen.vo.OrderItemDTO">
+        <id column="oiid" property="id"/>
+        <result column="spid" property="spid" ></result>
+        <result column="spname" property="spname" ></result>
+        <result column="count" property="count" ></result>
+        <result column="price" property="price" ></result>
+        <result column="totalprice" property="totalprice" ></result>
+        <result column="tupian" property="tupian" ></result>
+        <result column="oistate" property="state" ></result>
+        <result column="wlno" property="wlno" ></result>
+        <result column="shaccount" property="shaccount" ></result>
+        <result column="shname" property="shname" ></result>
+        <association property="comment" javaType="com.daowen.entity.Spcomment" >
+            <id property="id" column="cid"></id>
+            <result property="cresult" column="cresult"></result>
+            <result property="des" column="cdes"></result>
+            <result property="spid" column="cspid"></result>
+            <result property="orderid" column="corderid"></result>
+            <result property="createtime" column="ccreatetime"></result>
+            <result property="appraiserid" column="cappraiserid"></result>
+        </association>
+    </resultMap>
+
+    <select id="getOrderItem" parameterType="map" resultMap="rmOrderItemDTO" >
+        select g.id as spid,
+        g.name as spname,g.tupian,
+        sh.accountname as shaccount,
+        sh.name  as shname,
+        oi.state as oistate,
+        oi.count,oi.price,oi.totalprice,oi.id as oiid,
+        oi.wlno,spc.id as cid,spc.cresult,spc.des as cdes,
+        spc.spid as cspid,spc.orderid as corderid ,
+        spc.createtime as ccreatetime,
+        spc.appraiserid as cappraiserid
+        from
+        orderitem oi
+        left join shorder o
+        on oi.orderid=o.id
+        left join shangpin g
+        on g.id=oi.spid
+        left join spcomment spc
+        on spc.orderid=oi.id
+        left join huiyuan sh
+        on sh.id=g.pubren
+        where 1=1
+        <if test="id!=null">
+            and o.id=#{id}
+        </if>
+
+
+    </select>
+
+
+    <select id="loadOrderItem" parameterType="int" resultMap="rmOrderItemDTO" >
+        select g.id as spid,
+        g.name as spname,g.tupian,oi.state as oistate,
+        oi.count,oi.price,oi.totalprice,oi.id as oiid,
+        oi.wlno,spc.id as cid,spc.cresult,spc.des as cdes,
+        spc.spid as cspid,spc.orderid as corderid ,
+        spc.createtime as ccreatetime,
+        spc.appraiserid as cappraiserid
+        from
+        orderitem oi
+        left join shorder o
+        on oi.orderid=o.id
+        left join shangpin g
+        on g.id=oi.spid
+        left join spcomment spc
+        on spc.orderid=oi.id
+        where 1=1
+        <if test="id!=null">
+            and oi.id=#{id}
+        </if>
+
+
+    </select>
+
+
+    <select id="saleStat" resultType="hashmap" parameterType="map">
+
+        select oi.spid,s.name,
+        sum(oi.count) borrowcount,
+        sum(oi.totalprice) totalfee
+        from shorder o,
+        orderitem oi,
+        shangpin s
+        where o.id=oi.orderid
+        and oi.spid=s.id
+
+        <if test="begdate!=null">
+            and o.createtime>=#{begdate}
+        </if>
+        <if test="enddate!=null">
+            and o.createtime&lt;=#{enddate}
+        </if>
+        <if test="shid!=null">
+            and s.pubren=#{shid}
+        </if>
+        group by
+        oi.spid,s.name
+        order by borrowcount desc
+
+
+
+    </select>
+
+    <select id="getEntityPlus" parameterType="map"  resultMap="rmOrder2">
+
+        select o.*,h.accountname as puraccount,
+        h.name as purname
+        from
+        shorder o
+        left join huiyuan h
+        on  h.id=o.purchaser
+        where 1=1
+
+        <if test="state!=null">
+            and o.id in  (select distinct o1.id from shorder o1
+            left join orderitem oi
+            on oi.orderid=o1.id
+            where oi.state=#{state}
+            )
+        </if>
+        <if test="pubren!=null">
+            and o.id in  (select distinct o1.id from shorder o1
+            left join orderitem oi
+            on oi.orderid=o1.id
+            left join shangpin s
+            on s.id=oi.spid
+            where s.pubren=#{pubren}
+            )
+        </if>
+        <if test="purchaser!=null">
+            and o.purchaser=#{purchaser}
+        </if>
+        <if test="ddno!=null">
+            and o.ddno like '%${ddno}%'
+        </if>
+        <if test="order!=null ">
+            ${order}
+        </if>
+
+
+    </select>
+
+
+    <select id="loadPlus" parameterType="map"  resultMap="rmOrder2">
+
+        select o.*,h.accountname as puraccount,
+        h.name as purname
+        from
+        shorder o
+        left join huiyuan h
+        on  h.id=o.purchaser
+        where 1=1
+        <if test="id!=null">
+            and o.id=#{id}
+        </if>
+
+
+    </select>
+
+
+
+    <select id="getOrderInfo" resultMap="rmOrder">
+
+        select o.*,h.accountname as puraccount,h.name as purname, g.id as spid,
+        g.name as spname,g.tupian,oi.state as oistate,
+        oi.count,oi.price,oi.totalprice,oi.id as oiid,
+        oi.wlno,spc.cresult,spc.des as comdes
+        from
+        shorder o inner join orderitem oi
+        on oi.orderid=o.id
+        inner  join shangpin g
+        on g.id=oi.spid
+        inner join huiyuan h
+        on  h.id=o.purchaser
+        left join spcomment spc
+        on spc.orderid=oi.id
+        where 1=1
+        <if test="id!=null">
+            and o.id=#{id}
+        </if>
+        <if test="oiid!=null">
+            and oi.id=#{oiid}
+        </if>
+        <if test=" state!=null and state!='-1'  ">
+            and oi.state=#{state}
+        </if>
+
+    </select>
+
+
+
+
+
+</mapper>

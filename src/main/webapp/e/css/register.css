@@ -1,0 +1,83 @@
+
+
+.reg-panel1{
+  width: 1086px;
+    margin: 12px auto;
+}
+.reg-panel1 .hd{
+    font-weight: bold;
+    font-size: 28px;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 10px;
+    color: rgb(52, 73, 94);
+    font-family: "Microsoft Yahei", 微软雅黑, "Helvetica Neue", adobe雅黑;
+}
+.reg-panel1 .hd .des{
+    color: #8c8c8c;
+    font-size: 14px;
+    padding-top: 5px;
+    padding-left: 10px;
+}
+.reg-panel1 .bd{
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    background-color: #fff;
+    text-align: center;
+    padding: 50px 0;
+    color: #888;
+    font-size: 14px;
+}
+
+.reg-panel1 .bd .form-row{
+    display: flex;
+    transition: all 0.3s ease 0s;
+    padding: 15px 60px;
+}
+.reg-panel1 .bd .form-row .label2{
+     width: 100px;
+    font-size: 14px;
+    line-height: 38px;
+}
+.reg-panel1 .bd .form-row .label2 em{
+    color:red;
+    padding: 2px 9px;
+}
+.reg-panel1 .bd .form-row .ct{
+   position: relative;
+}
+.reg-panel1 .bd .form-row .input{
+    border: 1px solid #dbe2e6;
+    border-radius: 2px;
+    float: left;
+    height: 38px;
+    line-height: 38px;
+    text-indent: 20px;
+    width: 500px;
+    color: #888;
+    font-size: 12px;
+}
+.form-row input:focus{
+    outline:1px solid #f90 !important;
+    box-shadow:0 0 6px rgba(0, 0, 0, 0.19);
+}
+
+.reg-btn{
+    background-color: #70ca10;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-size: 16px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 180px;
+    margin-left: 100px;
+    padding-left: 4px;
+    letter-spacing: 5px;
+}

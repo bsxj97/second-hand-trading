@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.daowen.mapper.PagesettingMapper">
+
+    <resultMap id="rmPageColumn" type="com.daowen.vo.PageSettingVo">
+
+        <result column="pid" property="pageId"/>
+        <result column="pname" property="pageName"/>
+         <collection property="psItemVos" ofType="com.daowen.vo.PsItemVo" column="pid">
+              <id column="id" property="id"></id>
+              <result column="lmid" property="lmId" javaType="int" jdbcType="INTEGER"></result>
+              <result column="lmname" property="lmName" javaType="String" jdbcType="VARCHAR"></result>
+             <result column="lmtype" property="lmType" javaType="int" jdbcType="INTEGER"></result>
+
+         </collection>
+
+    </resultMap>
+    <select id="getPageColumn" resultMap="rmPageColumn"   parameterType="int" >
+
+
+        select ps.id as pid,ps.name as pname,psi.id,
+        lm.id as lmid ,lm.name as lmname,
+        lm.type as lmtype
+        from pagesetting ps
+
+        left join  psitem psi
+        on ps.id=psi.pageid
+        left join lanmu lm
+        on psi.lmid=lm.id
+
+           where 1=1
+
+            and ps.id=#{id}
+
+           order by psi.id asc
+
+    </select>
+
+    <select id="getColumnState" resultType="map" parameterType="map">
+        select lm.id as lmid ,lm.name as lmname,
+        lm.type as lmtype,
+        psi.pageid from lanmu lm
+        LEFT JOIN
+         psitem psi
+         on  psi.lmid=lm.id
+         <if test="pageid!=null">
+             and psi.pageid=#{pageid}
+         </if>
+        <if test="lmname!=null">
+            and lm.name like '%${lmname}%'
+        </if>
+
+    </select>
+
+
+   
+</mapper>

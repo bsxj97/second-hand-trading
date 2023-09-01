@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.daowen.mapper.ChongzhirecMapper">
+
+
+      <select id="getEntityPlus"   resultType="chongzhirec">
+                 select  c.* from  chongzhirec c
+                 where  1=1
+                 <if test="ddno!=null">
+                     and ddno like '%ddno%'
+                 </if>
+      </select>
+      
+       <select id="loadPlus"   resultType="chongzhirec">
+                 select  c.* from  chongzhirec c
+                 where 1=1
+                  <if test="id!=null">
+                      and  c.id=#{id}
+                  </if>
+                  <if test="ddno!=null">
+                      and c.ddno=#{ddno}
+                  </if>
+
+      </select>
+      
+
+
+</mapper>
+
+

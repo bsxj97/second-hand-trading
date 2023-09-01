@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.daowen.mapper.LeavewordMapper">
+
+
+    <select id="getEntityPlus"    resultType="com.daowen.vo.LeavewordVo" parameterType="map">
+        select  lw.*,h.name as pbrname,
+        h.accountname as pburen,
+        h.touxiang as pbrphoto,
+        u.name as rpname,
+        u.touxiang as rpphoto
+        from  leaveword lw
+        inner join  huiyuan h
+        on lw.hyid=h.id
+        left join huiyuan u
+        on  u.id=lw.targetid
+        where 1=1
+        <if test="hyid">
+            and lw.hyid=#{hyid}
+        </if>
+
+        <if test="targetid">
+            and lw.targetid=#{targetid}
+        </if>
+        <if test="order">
+            ${order}
+        </if>
+        <if test="id!=null">
+            and lw.id=#{id}
+        </if>
+
+    </select>
+
+    <select id="loadPlus"   resultType="com.daowen.vo.LeavewordVo"  parameterType="map">
+        select  lw.*,h.name as pbrname,
+        h.accountname as pburen,
+        h.touxiang as pbrphoto,
+        u.name as rpname,
+        u.touxiang as rpphoto
+        from  leaveword lw
+        inner join  huiyuan h
+        on lw.hyid=h.id
+        left join huiyuan u
+        on  u.id=lw.targetid
+        where 1=1
+
+        <if test="id!=null">
+            and lw.id=#{id}
+        </if>
+
+    </select>
+
+
+
+</mapper>
+
+

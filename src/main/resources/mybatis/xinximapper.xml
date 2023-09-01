@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.daowen.mapper.XinxiMapper">
+
+    <resultMap id="rmXinxi" type="com.daowen.vo.XinxiVo">
+        <id column="id" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="pubren" property="pubren"></result>
+        <result column="pubtime" property="pubtime"></result>
+        <result column="clickcount" property="clickcount"></result>
+        <result column="agreecount" property="agreecount"></result>
+        <result column="againstcount" property="againstcount"></result>
+        <result column="lmid" property="lmid"></result>
+        <result column="tuijian" property="tuijian"></result>
+        <result column="tupian" property="tupian"></result>
+        <result column="lmname" property="lmname"></result>
+        <result column="subtypename" property="subtypename"></result>
+        <result column="tagname" property="tagname"></result>
+        <result column="dcontent" property="dcontent"></result>
+        <result column="pbrname" property="pbrname"></result>
+        <result column="pbrphoto" property="pbrphoto"></result>
+
+    </resultMap>
+
+    <select id="getEntityPlus" resultMap="rmXinxi" parameterType="hashmap">
+
+        select x.*,
+        h.name as pbrname,
+        h.touxiang as pbrphoto,
+        lm.name as lmname,
+        s.name as subtypename,
+        t.name as tagname
+         from xinxi x
+         inner join lanmu lm
+         on x.lmid=lm.id
+            left join
+            subtype s
+            on   x.subtypeid=s.id
+            left join  stag t
+            on x.tagid=t.id
+            left join huiyuan h
+            on h.id=x.pubren
+        where 1=1
+        <if test=" lmid!=null ">
+            and x.lmid=#{lmid}
+        </if>
+        <if test=" subtypeid!=null ">
+            and x.subtypeid=#{subtypeid}
+        </if>
+        <if test=" pubren!=null ">
+            and x.pubren=#{pubren}
+        </if>
+        <if test=" state!=null ">
+            and x.state=#{state}
+        </if>
+        <if test=" title!=null ">
+            and x.title like '%${title}%'
+        </if>
+        <if test="ids!=null">
+            and x.id in
+            <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+                #{id}
+            </foreach>
+        </if>
+          <if test=" keyword!=null ">
+                 and (x.title like '%${keyword}%' or t.name like '%${keyword}%')
+             </if>
+        <if test=" order!=null ">
+            ${order}
+        </if>
+        <if test=" topcount!=null ">
+            limit  ${topcount}
+        </if>
+
+    </select>
+
+    <select id="loadPlus" resultMap="rmXinxi" parameterType="hashmap">
+
+
+        select x.*,
+        h.name as pbrname,
+        h.touxiang as pbrphoto,
+        lm.name as lmname,
+        s.name as subtypename,
+        t.name as tagname
+        from xinxi x
+        inner join lanmu lm
+        on x.lmid=lm.id
+        left join
+        subtype s
+        on   x.subtypeid=s.id
+        left join  stag t
+        on x.tagid=t.id
+        left join huiyuan h
+        on h.id=x.pubren
+        where 1=1
+            <if test=" id!=null ">
+                and x.id=#{id}
+            </if>
+
+
+
+
+    </select>
+
+
+</mapper>

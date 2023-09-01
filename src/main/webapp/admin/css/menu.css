@@ -1,0 +1,89 @@
+.main
+{
+   position:relative;
+   width:100%;
+   background:#ffffff;
+   height:500px;
+   
+   
+}
+
+/*左侧主菜单*/
+#side-menu
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 172px;
+	height: 500px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	border: 1px solid #dfdfdf;
+	background: #ffffff;
+}
+#side-menu h2
+{
+	height: 29px;
+	line-height: 29px;
+	border-top: 1px solid #dfdfdf;
+	padding-left: 10px;
+	font-size: 12px;
+	background: #f8f8f8;
+	
+}
+#side-menu .first
+{
+	border: none;
+}
+#side-menu ul
+{
+	padding: 8px;
+}
+#side-menu li
+{
+	margin-bottom: 3px;
+	overflow: hidden;
+}
+#side-menu li a
+{
+	display: block;
+	text-indent: 19px;
+	height: 27px;
+	line-height: 27px;
+	text-decoration: none;
+	color: #222;
+}
+#side-menu li a:hover
+{
+	height: 25px;
+	line-height: 25px;
+	border: 1px solid #dfdfdf;
+	text-indent: 18px;
+	text-decoration: none;
+	background: #fff;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+#side-menu .current a, #side-menu .current a:hover
+{
+	text-indent: 19px;
+	height: 27px;
+	line-height: 27px;
+	border: none;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	font-weight: bold;
+	color: #fff;
+	background: #0080CC;
+}
+
+.main-content
+{
+	margin: 0 0 50px 172px;
+	min-width: 540px;
+	border: 1px solid #dfdfdf;
+	height:500px;
+	overflow:auto;
+	position:absolute;
+	
+}

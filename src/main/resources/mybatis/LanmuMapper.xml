@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.daowen.mapper.LanmuMapper">
+
+      <resultMap id="rmLanmu" type="com.daowen.vo.LanmuVo">
+          <id column="id" property="id"></id>
+          <result column="name" property="name"></result>
+          <result column="bannerurl" property="bannerurl"></result>
+          <result column="type" property="type"></result>
+          <collection property="subtypes" ofType="com.daowen.entity.Subtype" column="id">
+              <id property="id" column="subtypeid"></id>
+              <result property="parentid" column="id"></result>
+              <result property="name" column="subtypename"></result>
+          </collection>
+
+
+      </resultMap>
+
+      <select id="getEntityPlus"   resultMap="rmLanmu"  parameterType="map">
+
+                select l.* ,s.name as subtypename,
+                 s.id as subtypeid
+
+                 from lanmu l
+                 left  join subtype s on  s.parentid=l.id
+
+                 where 1=1
+
+                    <if test="name!=null">
+                        and l.name like '%${name}%'
+                    </if>
+                    <if test="type!=null">
+                        and l.type=#{type}
+                    </if>
+                    <if test="id!=null">
+                        and l.id=#{id}
+                    </if>
+                    <if test="order!=null">
+                        #{order}
+                    </if>
+
+
+      </select>
+      
+     <select id="loadPlus"   resultMap="rmLanmu"  parameterType="map">
+         select l.* ,s.name as subtypename,
+         s.id as subtypeid
+
+         from lanmu l
+         left  join subtype s on  s.parentid=l.id
+
+         where 1=1
+             <if test="id!=null">
+                 and l.id=#{id}
+             </if>
+
+      </select>
+      
+
+
+</mapper>
+
+

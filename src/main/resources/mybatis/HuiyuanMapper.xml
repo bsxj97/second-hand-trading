@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.daowen.mapper.HuiyuanMapper">
+
+    <resultMap id="rmHuiyuan" type="com.daowen.entity.Huiyuan">
+          <id property="id" column="id"></id>
+          <result property="accountname" column="accountname"></result>
+          <result property="name" column="name"></result>
+          <result property="mobile" column="mobile"></result>
+          <result property="email" column="email"></result>
+          <result property="logtimes" column="logtimes"></result>
+          <result property="address" column="address"></result>
+          <result property="nickname" column="nickname"></result>
+          <result property="paypwd" column="paypwd"></result>
+          <result property="password" column="password"></result>
+          <result property="regdate" column="regdate"></result>
+          <result property="sex" column="sex"></result>
+          <result property="status" column="status"></result>
+          <result property="touxiang" column="touxiang"></result>
+          <result property="yue" column="yue"></result>
+          <result property="idcardno" column="idcardno"></result>
+          <result property="des" column="des"></result>
+          <result property="fans" column="fans"></result>
+          <result property="typeid" column="typeid"></result>
+        <association property="hytype" javaType="com.daowen.entity.Hytype">
+            <id property="id" column="typeid"></id>
+            <result property="name" column="typename"></result>
+            <result property="discount" column="discount"></result>
+        </association>
+          <collection property="receaddresses" ofType="com.daowen.entity.Receaddress">
+              <id column="addid" property="id"></id>
+              <id column="shr" property="shr"></id>
+              <id column="amobile" property="mobile"></id>
+              <id column="postcode" property="postcode"></id>
+              <id column="addinfo" property="addinfo"></id>
+              <id column="hyid" property="hyid"></id>
+          </collection>
+    </resultMap>
+
+    <select id="getEntityPlus" resultMap="rmHuiyuan" parameterType="map">
+        select h.*,
+        addr.id as addid,
+        addr.shr,
+        addr.title,
+        addr.mobile as amobile,
+        addr.postcode,
+        addr.addinfo,
+        addr.hyid,
+        ht.name as typename,
+        ht.discount
+        from huiyuan h
+        left join receaddress addr
+        on addr.hyid=h.id
+        left join hytype ht
+        on ht.id=h.typeid
+        where 1=1
+        <if test="name!=null">
+            and h.name like '%${name}%'
+        </if>
+        <if test="accountname!=null">
+            and h.accountname like '%${accountname}%'
+        </if>
+
+
+    </select>
+
+
+    <select id="loadPlus" resultMap="rmHuiyuan" parameterType="map">
+        select h.*,
+        addr.id as addid,
+        addr.shr,
+        addr.title,
+        addr.mobile as amobile,
+        addr.postcode,
+        addr.addinfo,
+        addr.hyid,
+        ht.name as typename,
+        ht.discount
+        from huiyuan h
+        left join receaddress addr
+        on addr.hyid=h.id
+        left join hytype ht
+        on ht.id=h.typeid
+        where 1=1
+        <if test="id!=null">
+            and h.id=#{id}
+        </if>
+        <if test="accoutname!=null">
+            and h.accountname=#{accountname}
+        </if>
+
+    </select>
+
+    <select id="getStars" parameterType="int" resultType="com.daowen.vo.GuanzhuVo">
+          select h.*,f.id as gzid,f.targetid ,f.actionid from huiyuan h ,
+          fans f
+          where h.id=f.targetid
+
+          and f.actionid=#{id}
+
+     </select>
+
+
+</mapper>
+
+

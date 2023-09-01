@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.daowen.mapper.BrowserecMapper">
+
+
+      <select id="getEntityPlus"   resultType="browserec">
+                 select  * from  browserec
+                 where  1=1
+                  <if test="hyid!=null">
+                      and hyid=#{hyid}
+                  </if>
+                 <if test="targetid!=null">
+                     and targetid=#{targetid}
+                 </if>
+                 <if test="type!=null">
+                     and type=#{type}
+                 </if>
+      </select>
+      
+       <select id="loadPlus"   resultType="browserec">
+                 select  * from  browserec
+                 where  id=#{id}
+
+      </select>
+      
+
+
+</mapper>
+
+

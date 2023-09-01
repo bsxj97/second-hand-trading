@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.daowen.mapper.UsersMapper">
+
+
+    <select id="getEntityPlus" resultType="users" parameterType="map">
+
+          select u.*,r.name as rolename
+          from  users  u ,sysrole r
+          where u.roleid=r.id
+          <if test="username!=null">
+              and username like '%${username}%'
+          </if>
+         <if test="realname!=null">
+            and realname like '%${realname}%'
+         </if>
+
+
+    </select>
+
+    <select id="loadPlus" resultType="users" parameterType="map">
+
+        select u.*,r.name as rolename
+        from  users  u ,sysrole r
+        where u.roleid=r.id
+         <if test="id!=null">
+             and u.id=#{id}
+         </if>
+        <if test="username!=null">
+            and username = #{username}
+        </if>
+
+
+    </select>
+
+
+</mapper>

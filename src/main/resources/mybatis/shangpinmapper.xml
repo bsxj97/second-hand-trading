@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.daowen.mapper.ShangpinMapper">
+
+    <resultMap id="rmShangpin" type="com.daowen.vo.ShangpinVo">
+        <id column="id" property="id"></id>
+        <result column="name" property="name" ></result>
+        <result column="subtitle" property="subtitle" ></result>
+        <result column="typeid" property="typeid" ></result>
+        <result column="subtypeid" property="subtypeid" ></result>
+        <result column="tagid" property="tagid" ></result>
+        <result column="jiage" property="jiage" ></result>
+        <result column="hyjia" property="hyjia" ></result>
+        <result column="tupian" property="tupian" ></result>
+        <result column="pubtime" property="pubtime" ></result>
+        <result column="pubren" property="pubren" ></result>
+        <result column="state" property="state" ></result>
+        <result column="kucun" property="kucun" ></result>
+        <result column="danwei" property="danwei" ></result>
+        <result column="jieshao" property="jieshao" ></result>
+        <result column="typename" property="typename" ></result>
+        <result column="subtypename" property="subtypename" ></result>
+        <result column="tagname" property="tagname" ></result>
+        <result column="chandi" property="chandi" ></result>
+        <result column="couponid" property="couponid" ></result>
+
+    </resultMap>
+    <select id="getEntityPlus"  resultMap="rmShangpin"   >
+
+               select sp.*, lm.name as typename,
+               st.name as subtypename,
+               t.name as tagname
+                from shangpin sp
+                left join lanmu lm
+                on lm.id=sp.typeid
+                left join stag t
+               on t.id=sp.tagid
+
+               left join  subtype st
+               on   st.id=sp.subtypeid
+
+               where 1=1
+               <if test="spname!=null">
+                  and sp.name like '%${spname}%'
+               </if>
+                <if test="pubren!=null">
+                    and sp.pubren=#{pubren}
+                </if>
+
+                <if test="state!=null ">
+                     and sp.state=#{state}
+                </if>
+                <if test="spstate!=null ">
+                    and sp.spstate=#{spstate}
+                </if>
+                <if test="tagid!=null ">
+                    and sp.tagid=#{tagid}
+                </if>
+                <if test="hot!=null ">
+                    and sp.hot=#{hot}
+                </if>
+                <if test="typeid!=null ">
+                    and sp.typeid=#{typeid}
+                </if>
+                <if test="chandi!=null ">
+                    and sp.chandi=#{chandi}
+                </if>
+                <if test="subtypeid!=null ">
+                    and sp.subtypeid=#{subtypeid}
+                </if>
+                <if test="ids!=null">
+                    and sp.id in
+                     <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+                        #{id}
+                     </foreach>
+                </if>
+                <if test="order!=null ">
+                    ${order}
+                </if>
+
+                <if test="topcount!=null ">
+                    limit #{topcount}
+                </if>
+
+
+
+    </select>
+
+    <select id="loadPlus"  resultMap="rmShangpin"   >
+
+        select sp.*, lm.name as typename,
+        st.name as subtypename,
+        t.name as tagname
+        from shangpin sp
+        left join lanmu lm
+        on lm.id=sp.typeid
+        left join stag t
+        on t.id=sp.tagid
+
+        left join  subtype st
+        on   st.id=sp.subtypeid
+
+         where 1=1
+        <if test="id!=null">
+            and sp.id =#{id}
+        </if>
+
+
+
+    </select>
+
+    <select id="getRecomment" parameterType="map" resultMap="rmShangpin" >
+
+
+       select sp.*, lm.name as typename,
+        st.name as subtypename,
+        t.name as tagname
+        from shangpin sp
+        left join lanmu lm
+        on lm.id=sp.typeid
+        left join stag t
+        on t.id=sp.tagid
+
+        left join  subtype st
+        on   st.id=sp.subtypeid
+
+         where 1=1
+
+        <if test="tagids!=null">
+            and sp.tagid in
+            <foreach item="tagid" collection="tagids" separator="," open="(" close=")" index="">
+                #{tagid}
+            </foreach>
+        </if>
+        <if test="top!=null">
+            limit ${top}
+        </if>
+
+
+    </select>
+
+
+
+
+
+</mapper>
